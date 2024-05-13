@@ -1,0 +1,16 @@
+server:
+  cert: ./cert.pem
+  key: ./key.pem
+
+mysql:
+  host: localhost
+  port: 3308
+  userName: root
+  password: Zhangx@mysql281619
+  dbname: go-auth-server
+
+redis:
+  addr: localhost:6379
+  password: "Zhangx@redis281619"
+  db: 0
+
