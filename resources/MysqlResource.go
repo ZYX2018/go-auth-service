@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go-auth-service/config"
 	"go-auth-service/models"
+	"go-auth-service/models/entry"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
@@ -27,8 +28,8 @@ func InitMysqlResource(appConfig *config.AppConfig) (*gorm.DB, error) {
 }
 func AutoMigrateAllModels(db *gorm.DB) {
 	modelsToMigrate := []interface{}{
-		&models.User{},
-		&models.Role{},
+		&entry.User{},
+		&entry.Role{},
 		&models.UserGroup{},
 		// 添加其他模型...
 	}
