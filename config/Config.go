@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"gopkg.in/yaml.v2"
 	"os"
 )
@@ -20,30 +19,28 @@ type AppConfig struct {
 		DB       int    `yaml:"db"`
 	} `yaml:"redis"`
 
-	ServerConfig struct {
-		cert string `yaml:"cert"`
-		key  string `yaml:"key"`
-	}
+	Server struct {
+		Port         int    `yaml:"port"`
+		cert         string `yaml:"cert"`
+		key          string `yaml:"key"`
+		ClientCACert string `yaml:"client_ca_cert"`
+		NameSpace    string `yaml:"name_space"`
+	} `yaml:"server"`
+
+	SM2 struct {
+		PrivateKey string `yaml:"private_key"`
+		PublicKey  string `yaml:"public_key"`
+	} `yaml:"sm2"`
 }
 
-func LoadConfig() (*AppConfig, error) {
-	f, err := os.Open("config.yaml")
+func LoadConfig() *AppConfig {
+	config := &AppConfig{}
+	data, err := os.ReadFile("config.yaml")
 	if err != nil {
-		return nil, err
+		panic("读取配置文件失败")
 	}
-	defer func(f *os.File) {
-		err := f.Close()
-		if err != nil {
-			fmt.Println("config.yaml 文件关闭失败")
-		}
-	}(f)
-
-	var cfg AppConfig
-	decoder := yaml.NewDecoder(f)
-	err = decoder.Decode(&cfg)
-	if err != nil {
-		return nil, err
+	if err := yaml.Unmarshal(data, config); err != nil {
+		panic("解析配置文件失败")
 	}
-
-	return &cfg, nil
+	return config
 }

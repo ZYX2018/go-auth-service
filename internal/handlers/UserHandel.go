@@ -10,7 +10,7 @@ import (
 
 type UserHandel interface {
 	CreateUser(arg *arg.SaveOrUpdateUserArg) (*models.BaseModel, error)
-	GetUserByUsername(username string) (*entry.User, error)
+	GetUserByUsername(username string, clientId string) (*entry.User, error)
 	GetUserById(id string) (*entry.User, error)
 	DeleteUserById(id string) (*models.BaseModel, error)
 }
@@ -93,12 +93,12 @@ func (handel *userHandel) CreateUser(arg *arg.SaveOrUpdateUserArg) (*models.Base
 	return &models.BaseModel{ID: user.ID}, nil
 }
 
-func (handel *userHandel) GetUserByUsername(userName string) (*entry.User, error) {
+func (handel *userHandel) GetUserByUsername(userName string, clientId string) (*entry.User, error) {
 	if userName == "" {
 		panic("用户名不能为空")
 	}
 	var userModel entry.User
-	result := handel.db.First(&userModel, "userName = ?", userName)
+	result := handel.db.First(&userModel, "userName = ? and clientId", userName, clientId)
 	if result.Error != nil {
 		return nil, result.Error
 	}

@@ -1,6 +1,9 @@
 server:
+  port: 8080
   cert: ./cert.pem
   key: ./key.pem
+  client_ca_cert: "path/to/your_client_ca_cert.pem"
+  name_space: "dev"
 
 mysql:
   host: localhost
@@ -14,3 +17,6 @@ redis:
   password: "Zhangx@redis281619"
   db: 0
 
+sm2:
+  private_key: "path/to/sm2_private_key.pem"
+  public_key: "path/to/sm2_public_key.pem"

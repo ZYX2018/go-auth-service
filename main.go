@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
 	"go-auth-service/config"
 	"go-auth-service/internal/handlers"
 	"go-auth-service/models/arg"
@@ -14,23 +15,20 @@ import (
 )
 
 var DB *gorm.DB
+var RDB *redis.Client
+var appConfig *config.AppConfig
 var once sync.Once
 
 func init() {
 	once.Do(func() {
-		var err error
-		appConfig, err := config.LoadConfig()
-		if err != nil {
-			panic(err)
-		}
-		DB, err = resources.InitMysqlResource(appConfig)
-		if err != nil {
-			panic(err)
-		}
+		appConfig = config.LoadConfig()
+		DB = resources.InitMysqlResource(appConfig)
+		RDB = resources.InitRedisResource(appConfig)
 	})
 
 }
 func main() {
+
 	r := gin.Default()
 
 	r.GET("/hello", func(c *gin.Context) {
